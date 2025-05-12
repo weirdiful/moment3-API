@@ -1,3 +1,5 @@
+require('dotenv').config(); 
+
 const express = require('express');
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -9,13 +11,16 @@ app.use(cors());
 app.use(express.json()); 
 
 //Anslut till Mongodb
-mongoose.connect("").then(()=> {
-    console.log("Connected to MongoDV");
-}).catch((error)=> {
-    console.log("Error connecting to database: " + error);
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => {
+  console.log('Ansluten till MongoDB Atlas');
+}).catch(err => {
+  console.error('MongoDB-anslutningsfel:', err.message);
 });
 
-const Experience = mongoose.model('Experience', experienceSchema);
+
 
 //Schema
 
@@ -25,6 +30,8 @@ const experienceSchema = new mongoose.Schema({
     duration: { type: String, required: true },
     description: { type: String, required: false }
   });
+
+  const Experience = mongoose.model('Experience', experienceSchema);
 
 
   app.post('/api/experiences', async (req, res) => {
@@ -86,3 +93,8 @@ const experienceSchema = new mongoose.Schema({
     }
   });
   
+
+  const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server körs på port ${PORT}`);
+});
