@@ -8,13 +8,7 @@ const { MongoClient, ObjectId } = require('mongodb');
 const app = express();
 
 const uri = process.env.MONGO_URI;
-const client = new MongoClient(process.env.MONGO_URI, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
-});
+const client = new MongoClient(uri);
 
 let db;
 
